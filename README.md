@@ -75,7 +75,13 @@ python manage.py runserver
 | PUT | `/api/doctors/<id>/` | Update doctor | Yes |
 | DELETE | `/api/doctors/<id>/` | Delete doctor | Yes |
 
-> More endpoints will be added as features are implemented.
+### Patient-Doctor Mapping
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/mappings/` | Assign a doctor to a patient | Yes |
+| GET | `/api/mappings/` | List all mappings | Yes |
+| GET | `/api/mappings/<patient_id>/` | Get all doctors for a patient | Yes |
+| DELETE | `/api/mappings/delete/<id>/` | Remove a doctor from a patient | Yes |
 
 ### Authentication Usage
 
@@ -111,6 +117,7 @@ health_care/
 ├── authentication/       # Custom user model, register & login APIs
 ├── patients/             # Patient model and CRUD APIs
 ├── doctors/              # Doctor model and CRUD APIs
+├── mappings/             # Patient-Doctor assignment APIs
 ├── manage.py
 ├── requirements.txt
 ├── .env.example
