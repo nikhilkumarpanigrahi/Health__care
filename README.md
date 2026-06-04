@@ -52,18 +52,45 @@ python manage.py runserver
 ## API Endpoints
 
 ### Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register/` | Register a new user |
-| POST | `/api/auth/login/` | Login and receive JWT token |
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/auth/register/` | Register a new user | No |
+| POST | `/api/auth/login/` | Login and receive JWT token | No |
 
 > More endpoints will be added as features are implemented.
+
+### Authentication Usage
+
+**Register:**
+```json
+POST /api/auth/register/
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "secret123"
+}
+```
+
+**Login:**
+```json
+POST /api/auth/login/
+{
+  "email": "john@example.com",
+  "password": "secret123"
+}
+```
+
+Response returns `access` and `refresh` JWT tokens. Pass the access token in subsequent requests:
+```
+Authorization: Bearer <access_token>
+```
 
 ## Project Structure
 
 ```
 health_care/
-├── healthcare_backend/   # Django project settings
+├── healthcare_backend/   # Django project settings & root URLs
+├── authentication/       # Custom user model, register & login APIs
 ├── manage.py
 ├── requirements.txt
 ├── .env.example
