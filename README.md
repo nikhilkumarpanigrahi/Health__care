@@ -66,6 +66,15 @@ python manage.py runserver
 | PUT | `/api/patients/<id>/` | Update patient | Yes |
 | DELETE | `/api/patients/<id>/` | Delete patient | Yes |
 
+### Doctor Management
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/doctors/` | Add a new doctor | Yes |
+| GET | `/api/doctors/` | List all doctors | Yes |
+| GET | `/api/doctors/<id>/` | Get doctor details | Yes |
+| PUT | `/api/doctors/<id>/` | Update doctor | Yes |
+| DELETE | `/api/doctors/<id>/` | Delete doctor | Yes |
+
 > More endpoints will be added as features are implemented.
 
 ### Authentication Usage
@@ -101,6 +110,7 @@ health_care/
 ├── healthcare_backend/   # Django project settings & root URLs
 ├── authentication/       # Custom user model, register & login APIs
 ├── patients/             # Patient model and CRUD APIs
+├── doctors/              # Doctor model and CRUD APIs
 ├── manage.py
 ├── requirements.txt
 ├── .env.example
