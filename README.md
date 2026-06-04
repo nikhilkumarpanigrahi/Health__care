@@ -57,6 +57,15 @@ python manage.py runserver
 | POST | `/api/auth/register/` | Register a new user | No |
 | POST | `/api/auth/login/` | Login and receive JWT token | No |
 
+### Patient Management
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/patients/` | Add a new patient | Yes |
+| GET | `/api/patients/` | List all patients (by logged-in user) | Yes |
+| GET | `/api/patients/<id>/` | Get patient details | Yes |
+| PUT | `/api/patients/<id>/` | Update patient | Yes |
+| DELETE | `/api/patients/<id>/` | Delete patient | Yes |
+
 > More endpoints will be added as features are implemented.
 
 ### Authentication Usage
@@ -91,6 +100,7 @@ Authorization: Bearer <access_token>
 health_care/
 ├── healthcare_backend/   # Django project settings & root URLs
 ├── authentication/       # Custom user model, register & login APIs
+├── patients/             # Patient model and CRUD APIs
 ├── manage.py
 ├── requirements.txt
 ├── .env.example
