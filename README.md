@@ -1,50 +1,13 @@
-# Healthcare Backend API
+# Healthcare Backend
 
-![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)
-![Django](https://img.shields.io/badge/Django-4.2-092E20?logo=django&logoColor=white)
-![DRF](https://img.shields.io/badge/DRF-3.15-red?logo=django&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?logo=postgresql&logoColor=white)
-![JWT](https://img.shields.io/badge/Auth-JWT-black?logo=jsonwebtokens&logoColor=white)
-
-A RESTful backend for a healthcare application — manage patients, doctors, and their assignments with JWT-secured endpoints, built with Django REST Framework and PostgreSQL.
-
----
-
-## Table of Contents
-
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [API Reference](#api-reference)
-
----
+A RESTful backend system for a healthcare application built with Django, Django REST Framework, and PostgreSQL.
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Framework | Django 4.2 + Django REST Framework 3.15 |
-| Database | PostgreSQL 15 |
-| Authentication | JWT — `djangorestframework-simplejwt` |
-| Configuration | `python-decouple` |
-
----
-
-## Project Structure
-
-```
-health_care/
-├── authentication/       # Custom user model, register & login
-├── patients/             # Patient CRUD APIs (user-scoped)
-├── doctors/              # Doctor CRUD APIs
-├── mappings/             # Patient-Doctor assignment APIs
-├── healthcare_backend/   # Project settings & root URLs
-├── manage.py
-├── requirements.txt
-└── .env.example
-```
-
----
+- **Framework**: Django 4.2, Django REST Framework 3.15
+- **Database**: PostgreSQL
+- **Authentication**: JWT via `djangorestframework-simplejwt`
+- **Config**: `python-decouple` for environment variables
 
 ## Getting Started
 
@@ -53,68 +16,78 @@ health_care/
 - Python 3.8+
 - PostgreSQL 15+
 
-### Installation
+### Setup
 
 ```bash
-git clone https://github.com/nikhilkumarpanigrahi/Health__care.git
-cd Health__care
+# Clone the repository
+git clone https://github.com/nikhilkumarpanigrahi/Health_care.git
+cd Health_care
 
+# Create and activate virtual environment
 python -m venv venv
 venv\Scripts\activate        # Windows
 source venv/bin/activate     # macOS/Linux
 
+# Install dependencies
 pip install -r requirements.txt
-```
 
-### Environment Setup
-
-```bash
+# Configure environment variables
 cp .env.example .env
+# Edit .env with your database credentials and secret key
 ```
 
-Edit `.env` with your credentials:
+### Create PostgreSQL Database
 
-```env
-SECRET_KEY=your-secret-key
-DEBUG=True
-DB_NAME=healthcare_db
-DB_USER=postgres
-DB_PASSWORD=your-password
-DB_HOST=localhost
-DB_PORT=5432
+```sql
+CREATE DATABASE healthcare_db;
 ```
 
-### Database & Server
+### Run Migrations
 
 ```bash
-# Create the database in PostgreSQL
-CREATE DATABASE healthcare_db;
-
-# Run migrations
 python manage.py migrate
-
-# Start server
 python manage.py runserver
 ```
 
-Server runs at `http://127.0.0.1:8000`
-
----
-
-## API Reference
-
-> All protected endpoints require the header:
-> `Authorization: Bearer <access_token>`
-
----
+## API Endpoints
 
 ### Authentication
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/auth/register/` | Register a new user | No |
+| POST | `/api/auth/login/` | Login and receive JWT token | No |
 
-#### `POST /api/auth/register/`
-Register a new user.
+### Patient Management
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/patients/` | Add a new patient | Yes |
+| GET | `/api/patients/` | List all patients (by logged-in user) | Yes |
+| GET | `/api/patients/<id>/` | Get patient details | Yes |
+| PUT | `/api/patients/<id>/` | Update patient | Yes |
+| DELETE | `/api/patients/<id>/` | Delete patient | Yes |
 
-**Request**
+### Doctor Management
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/doctors/` | Add a new doctor | Yes |
+| GET | `/api/doctors/` | List all doctors | Yes |
+| GET | `/api/doctors/<id>/` | Get doctor details | Yes |
+| PUT | `/api/doctors/<id>/` | Update doctor | Yes |
+| DELETE | `/api/doctors/<id>/` | Delete doctor | Yes |
+
+### Patient-Doctor Mapping
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/mappings/` | Assign a doctor to a patient | Yes |
+| GET | `/api/mappings/` | List all mappings | Yes |
+| GET | `/api/mappings/<patient_id>/` | Get all doctors for a patient | Yes |
+| DELETE | `/api/mappings/delete/<id>/` | Remove a doctor from a patient | Yes |
+
+### Authentication Usage
+
+**Register:**
 ```json
+POST /api/auth/register/
 {
   "name": "John Doe",
   "email": "john@example.com",
@@ -122,159 +95,39 @@ Register a new user.
 }
 ```
 
-**Response** `201 Created`
+**Login:**
 ```json
-{
-  "message": "User registered successfully",
-  "access": "<jwt_access_token>",
-  "refresh": "<jwt_refresh_token>"
-}
-```
-
----
-
-#### `POST /api/auth/login/`
-Login and receive JWT tokens.
-
-**Request**
-```json
+POST /api/auth/login/
 {
   "email": "john@example.com",
   "password": "secret123"
 }
 ```
 
-**Response** `200 OK`
-```json
-{
-  "access": "<jwt_access_token>",
-  "refresh": "<jwt_refresh_token>"
-}
+Response returns `access` and `refresh` JWT tokens. Pass the access token in subsequent requests:
+```
+Authorization: Bearer <access_token>
 ```
 
----
+## Postman Collection
 
-### Patients
+A Postman collection is included in the repository — [`Postman__collection.json`](Postman__collection.json).
 
-> Patients are scoped to the authenticated user — each user only sees their own patients.
+All 16 endpoints have been tested and saved with example responses. Import the file directly into Postman to get started without any manual setup.
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/patients/` | Add a new patient |
-| GET | `/api/patients/` | List all patients |
-| GET | `/api/patients/<id>/` | Get patient details |
-| PUT | `/api/patients/<id>/` | Update patient |
-| DELETE | `/api/patients/<id>/` | Delete patient |
+> **Note:** JWT tokens in the saved responses are replaced with `<jwt_access_token>` and `<jwt_refresh_token>` placeholders. After running Register or Login, copy your actual token and set it as the `Authorization: Bearer <token>` header.
 
-**Patient Object**
-```json
-{
-  "name": "Jane Doe",
-  "age": 28,
-  "gender": "Female",
-  "contact": "9876543210",
-  "address": "123 Main St",
-  "medical_history": "Hypertension"
-}
+## Project Structure
+
 ```
-
-**Response** `201 Created`
-```json
-{
-  "id": 1,
-  "name": "Jane Doe",
-  "age": 28,
-  "gender": "Female",
-  "contact": "9876543210",
-  "address": "123 Main St",
-  "medical_history": "Hypertension",
-  "created_by": 1,
-  "created_at": "2024-01-01T10:00:00Z",
-  "updated_at": "2024-01-01T10:00:00Z"
-}
-```
-
----
-
-### Doctors
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/doctors/` | Add a new doctor |
-| GET | `/api/doctors/` | List all doctors |
-| GET | `/api/doctors/<id>/` | Get doctor details |
-| PUT | `/api/doctors/<id>/` | Update doctor |
-| DELETE | `/api/doctors/<id>/` | Delete doctor |
-
-**Doctor Object**
-```json
-{
-  "name": "Dr. Smith",
-  "specialization": "Cardiology",
-  "contact": "9876500000",
-  "email": "smith@hospital.com",
-  "experience_years": 10
-}
-```
-
-**Response** `201 Created`
-```json
-{
-  "id": 1,
-  "name": "Dr. Smith",
-  "specialization": "Cardiology",
-  "contact": "9876500000",
-  "email": "smith@hospital.com",
-  "experience_years": 10,
-  "created_at": "2024-01-01T10:00:00Z",
-  "updated_at": "2024-01-01T10:00:00Z"
-}
-```
-
----
-
-### Patient-Doctor Mappings
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/mappings/` | Assign a doctor to a patient |
-| GET | `/api/mappings/` | List all mappings |
-| GET | `/api/mappings/<patient_id>/` | Get all doctors for a patient |
-| DELETE | `/api/mappings/<id>/` | Remove a doctor from a patient |
-
-**Assign Request**
-```json
-{
-  "patient": 1,
-  "doctor": 1
-}
-```
-
-**Response** `201 Created`
-```json
-{
-  "id": 1,
-  "patient": 1,
-  "doctor": 1,
-  "assigned_at": "2024-01-01T10:00:00Z"
-}
-```
-
-**Get doctors for a patient** `GET /api/mappings/1/`
-```json
-[
-  {
-    "id": 1,
-    "patient": 1,
-    "doctor": {
-      "id": 1,
-      "name": "Dr. Smith",
-      "specialization": "Cardiology",
-      "contact": "9876500000",
-      "email": "smith@hospital.com",
-      "experience_years": 10
-    },
-    "assigned_at": "2024-01-01T10:00:00Z"
-  }
-]
+health_care/
+├── healthcare_backend/   # Django project settings & root URLs
+├── authentication/       # Custom user model, register & login APIs
+├── patients/             # Patient model and CRUD APIs
+├── doctors/              # Doctor model and CRUD APIs
+├── mappings/             # Patient-Doctor assignment APIs
+├── manage.py
+├── requirements.txt
+├── .env.example
+└── README.md
 ```
