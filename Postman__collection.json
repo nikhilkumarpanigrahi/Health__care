@@ -51,7 +51,7 @@
               "_postman_previewlanguage": "json",
               "header": [{ "key": "Content-Type", "value": "application/json" }],
               "cookie": [],
-              "body": "{\n    \"message\": \"User registered successfully\",\n    \"access\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\"\n}"
+              "body": "{\n    \"message\": \"User registered successfully\",\n    \"access\": \"<jwt_access_token>\",\n    \"refresh\": \"<jwt_refresh_token>\"\n}"
             }
           ]
         },
@@ -98,7 +98,7 @@
               "_postman_previewlanguage": "json",
               "header": [{ "key": "Content-Type", "value": "application/json" }],
               "cookie": [],
-              "body": "{\n    \"access\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgwNzY0NTIyLCJpYXQiOjE3ODA2NzgxMjIsImp0aSI6IjhhNzg1NGU1NWRkZjRhYTRiNmZhYmM4ZjIxNDQ1Yzg2IiwidXNlcl9pZCI6Mn0.r6QOuayHPvJR0u308PyPomD5rfD4iM73RvkM_RRXAF4\",\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4MTI4MjkyMiwiaWF0IjoxNzgwNjc4MTIyLCJqdGkiOiJkMWFhNWUwZmUxZmY0ZjQ5ODliNzEwMWFhOTEzNWMxMSIsInVzZXJfaWQiOjJ9.2O_BsW_jX-rJmDgf2tJzecI8Ay5tk_7JkAIoSk4Pd7E\"\n}"
+              "body": "{\n    \"access\": \"<jwt_access_token>\",\n    \"refresh\": \"<jwt_refresh_token>\"\n}"
             }
           ]
         }
