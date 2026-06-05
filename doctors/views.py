@@ -1,6 +1,4 @@
 from rest_framework import generics, permissions
-from rest_framework.exceptions import NotFound
-
 from .models import Doctor
 from .serializers import DoctorSerializer
 
@@ -12,11 +10,6 @@ class DoctorListCreateView(generics.ListCreateAPIView):
 
 
 class DoctorDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def get_object(self):
-        try:
-            return Doctor.objects.get(pk=self.kwargs['pk'])
-        except Doctor.DoesNotExist:
-            raise NotFound('Doctor not found.')

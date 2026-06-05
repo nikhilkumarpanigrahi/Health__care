@@ -1,4 +1,6 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 
 from .models import PatientDoctorMapping
@@ -6,27 +8,25 @@ from .serializers import MappingSerializer, MappingDetailSerializer
 
 
 class MappingListCreateView(generics.ListCreateAPIView):
+    queryset = PatientDoctorMapping.objects.all()
     serializer_class = MappingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return PatientDoctorMapping.objects.all()
 
-
-class PatientDoctorsView(generics.ListAPIView):
-    serializer_class = MappingDetailSerializer
+class MappingDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return PatientDoctorMapping.objects.filter(patient_id=self.kwargs['patient_id'])
+    # GET /api/mappings/<patient_id>/ — all doctors assigned to a patient
+    def get(self, request, pk):
+        mappings = PatientDoctorMapping.objects.filter(patient_id=pk)
+        serializer = MappingDetailSerializer(mappings, many=True)
+        return Response(serializer.data)
 
-
-class MappingDeleteView(generics.DestroyAPIView):
-    serializer_class = MappingSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_object(self):
+    # DELETE /api/mappings/<id>/ — remove a mapping by its ID
+    def delete(self, request, pk):
         try:
-            return PatientDoctorMapping.objects.get(pk=self.kwargs['pk'])
+            mapping = PatientDoctorMapping.objects.get(pk=pk)
         except PatientDoctorMapping.DoesNotExist:
             raise NotFound('Mapping not found.')
+        mapping.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
